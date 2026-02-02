@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>From My Heart</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #ff758c, #ff7eb3);
+  color: white;
+}
+
+.heart {
+  font-size: 90px;
+  animation: beat 1s infinite;
+  margin-top: 25px;
+}
+
+@keyframes beat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.box {
+  margin: 22px;
+  padding: 22px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 25px;
+}
+
+button {
+  padding: 12px 22px;
+  margin: 8px;
+  border: none;
+  border-radius: 25px;
+  background: #ff2f68;
+  color: white;
+  font-size: 15px;
+}
+
+textarea {
+  width: 90%;
+  height: 120px;
+  border-radius: 15px;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+  <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<div class="heart">❤️</div>
+
+<div class="box" id="content"></div>
+
+<script>
+let step = 0;
+
+const quiz = [
+  {
+    q: "Do you remember our anniversary date?",
+    options: ["Oct 15 ❤️", "Sept 15"],
+    correct: "Oct 15 ❤️"
+  },
+  {
+    q: "Do you love me?",
+    options: ["Yes 💖", "option a"],
+    correct: "Yes 💖"
+  },
+  {
+    q: "What was my first gift?",
+    options: ["Me 🥰", "Serum", "Perfume"],
+    correct: "Me 🥰"
+  }
+];
+
+const finalMessage =
+"Thank you for choosing me,\n" +
+"even in moments when it wasn’t easy.\n\n" +
+"Thank you for the patience,\n" +
+"the smiles,\n" +
+"and the quiet care you give without asking.\n\n" +
+"You may never fully realize this,\n" +
+"but your presence became something\n" +
+"my heart feels safe in.\n\n" +
+"No matter how life changes,\n" +
+"this will always be something beautiful to me. ❤️";
+
+function loadQuestion() {
+  let html = "<h2>" + quiz[step].q + "</h2>";
+  quiz[step].options.forEach(opt => {
+    html += "<button onclick=\"answer('" + opt + "')\">" + opt + "</button>";
+  });
+  document.getElementById("content").innerHTML = html;
+}
+
+function answer(selected) {
+  // Start music on first tap
+  let music = document.getElementById("bgMusic");
+  if (music.paused) {
+    music.play();
+  }
+
+  // Wrong answer warning
+  if (selected !== quiz[step].correct) {
+    alert("See you after this quiz 😤");
+  }
+
+  step++;
+  if (step < quiz.length) {
+    loadQuestion();
+  } else {
+    showFinal();
+  }
+}
+
+function showFinal() {
+  document.getElementById("content").innerHTML =
+    "<h2>💌 From Me to You</h2>" +
+    "<p id='type'></p>" +
+    "<h3 style='margin-top:20px;'>Now it’s your turn ✍️</h3>" +
+    "<p style='font-size:14px;'>Write whatever you feel…</p>" +
+    "<textarea placeholder='Type your feelings here...'></textarea>";
+  typeWriter(finalMessage, 0);
+}
+
+function typeWriter(text, index) {
+  if (index < text.length) {
+    let char = text.charAt(index);
+    document.getElementById("type").innerHTML +=
+      char === "\n" ? "<br>" : char;
+    setTimeout(() => typeWriter(text, index + 1), 45);
+  }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
